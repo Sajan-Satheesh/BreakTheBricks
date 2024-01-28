@@ -15,7 +15,7 @@ public class Ball : MonoBehaviour
 
 	void Start ()
 	{
-		direction= new Vector2(0f,-8f);
+		direction= Vector2.zero;
 		speed = defaultSpeed;   //Sets the ball position to the middle of the screen			//Sets the ball's direction to go down
         //StartCoroutine("ResetBallWaiter");		//Starts the 'ResetBallWaiter' coroutine to have the ball wait 1 second before moving
 	}
@@ -24,13 +24,21 @@ public class Ball : MonoBehaviour
 	{
 		rig.velocity = direction * speed * Time.deltaTime;			//Sets the object's rigidbody velocity to the direction multiplied by the speed
 
-		if(transform.position.y < -8)
+		if(transform.position.y < manager.shooter.transform.position.y && direction!=Vector2.zero)
 		{
-			direction =  Vector2.zero;
-            transform.position = new Vector2(0f, -8f);
-            manager.BallsAlignStack.Push(gameObject);
+			returnToPool();
+            if (manager.BallsPool.shotBalls.Count == 0) manager.LiveLost();
         }
 	}
+
+	public void returnToPool()
+	{
+        direction = Vector2.zero;
+        gameObject.SetActive(false);
+        transform.position = new Vector2(0f, -7.9f);
+        manager.BallsPool.avaialbleBalls.Push(this);
+        manager.BallsPool.shotBalls.Remove(this);
+    }
 
 	//Called when the ball needs to change direction (hit paddle, hit brick). The target parameter is the position of the object that the ball has hit
 	public void SetDirection (Vector3 target)

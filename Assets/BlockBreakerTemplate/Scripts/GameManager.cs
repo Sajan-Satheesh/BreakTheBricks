@@ -9,13 +9,14 @@ public class GameManager : MonoBehaviour
 	public int ballSpeedIncrement = 10;	//The amount of speed the ball will increase by everytime it hits a brick
 	public bool gameOver;			//Set true when the game is over
 	public bool wonGame;            //Set true when the game has been won
-	public BallsStore BallsAlign;
-	public Stack<GameObject> BallsAlignStack;
+	public BallsStore BallsPool;
+	//[SerializeField] int maxBallCount;
+	//public Stack<GameObject> BallsAlignStack;
 	public GameUI gameUI;			//The GameUI class
 
 	//Prefabs
 	public GameObject brickPrefab;  //The prefab of the Brick game object which will be spawned
-    public GameObject paddle;
+    [field: SerializeField] public Shooter shooter { get; private set; }
     public List<GameObject> bricks = new List<GameObject>();	//List of all the bricks currently on the screen
 	public int brickCountX;										//The amount of bricks that will be spawned horizontally (Odd numbers are recommended)
 	public int brickCountY;										//The amount of bricks that will be spawned vertically
@@ -30,14 +31,16 @@ public class GameManager : MonoBehaviour
 	//Called when the game starts
 	public void StartGame ()
 	{
-		score = 0;
+        
+        score = 0;
 		lives = 3;
 		gameOver = false;
 		wonGame = false;
-		paddle.GetComponent<Paddle>().shot = false;
+        shooter.manager = this;
+        shooter.shot = false;
 		CreateBrickArray();
-		BallsAlignStack = BallsAlign.Balls;
-	}
+        Time.timeScale = 1;
+    }
 
 	//Spawns the bricks and sets their colours
 	public void CreateBrickArray ()
@@ -63,30 +66,42 @@ public class GameManager : MonoBehaviour
 			if (hitCount == 5) hitCount = 1;
 		}
 
-		//ball.GetComponent<Ball>().ResetBall();	//Gets the 'Ball' component of the ball game object and calls the 'ResetBall()' function to set the ball in the middle of the screen
 	}
 
 	//Called when there is no bricks left and the player has won
 	public void WinGame ()
 	{
 		wonGame = true;
+		shooter.stopShooting();
+        while (BallsPool.shotBalls.Count > 0)
+        {
+			BallsPool.shotBalls[0].returnToPool();                     //Reset the Balls
+        }
 		gameUI.SetWin();				//Set the game over UI screen
 	}
 
+	void resetPaddle()
+	{
+        shooter.shot = false;
+    }
 	//Called when the ball goes under the paddle and "dies"
 	public void LiveLost ()
 	{
-		lives--;										//Removes a life
+		lives--;                                        //Removes a life
 
-		if(lives < 0){									//Are the lives less than 0? Are there no lives left?
+		if (lives < 1)
+		{                                   //Are the lives less than 0? Are there no lives left?
 			gameOver = true;
-			gameUI.SetGameOver();						//Set the game over UI screen
+			gameUI.SetGameOver();                       //Set the game over UI screen
 
-			for(int x = 0; x < bricks.Count; x++){		//Loops through the 'bricks' list
-				Destroy(bricks[x]);						//Destory the brick
+			for (int x = 0; x < bricks.Count; x++)
+			{       //Loops through the 'bricks' list
+				Destroy(bricks[x]);                     //Destory the brick
 			}
 
-			bricks = new List<GameObject>();			//Resets the 'bricks' list variable
+			bricks = new List<GameObject>();            //Resets the 'bricks' list variable
 		}
-	}
+		else resetPaddle();
+
+    }
 }

@@ -1,27 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 
 public class BallsStore : MonoBehaviour
 {
-    public const int  ballsCount = 100;
-    public int availableBalls;
-    [SerializeField] public Stack<GameObject> Balls = new Stack<GameObject>(ballsCount);
-    [SerializeField] private GameObject ball;
+    public int ballsCount;
+    [SerializeField] public Stack<Ball> avaialbleBalls = new Stack<Ball>();
+    [SerializeField] public List<Ball> shotBalls = new List<Ball>();
+    [SerializeField] List<Ball> BallsList = new List<Ball>();
+    [SerializeField] private Ball ball;
     [SerializeField] private GameManager Manager;
     // Start is called before the first frame update
     void Start()
     {
-        while(Balls.Count <= ballsCount)
+        while(avaialbleBalls.Count < ballsCount)
         {
-            GameObject ballNew = Instantiate(ball,transform.position,Quaternion.identity) as GameObject;
-            ballNew.GetComponent<Ball>().manager = Manager;
-            Balls.Push(ballNew);
+            Debug.Log("new ball");
+            Ball ballNew = Instantiate(ball,transform.position,Quaternion.identity);
+            ballNew.manager = Manager;
+            avaialbleBalls.Push(ballNew);
         }
     }
 
+    private void Update()
+    {
+        BallsList = avaialbleBalls.ToList();
+    }
 }
 //[CustomEditor(typeof(BallsStore))]
 /*public class StackPreview : Editor

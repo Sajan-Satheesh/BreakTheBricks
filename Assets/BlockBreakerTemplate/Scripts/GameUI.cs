@@ -26,17 +26,23 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	void pauseGame()
+	{
+        Time.timeScale = 0;
+    }
 	//Called when the game is over
 	public void SetGameOver ()
 	{
-		gameOverScreen.SetActive(true);
+		pauseGame();
+        gameOverScreen.SetActive(true);
 		gameOverScoreText.text = "<b>YOU ACHIEVED A SCORE OF</b>\n" + manager.score;	//Sets the gameOverScoreText to display the words 'YOU ACHIEVED A SCORE OF' in bold and then the score value on a new line which is located in the GameManager class
 	}
 
 	//Called when the game has been won
 	public void SetWin ()
 	{
-		winScreen.SetActive(true);
+        pauseGame();
+        winScreen.SetActive(true);
 	}
 
 	//Called when the 'TRY AGAIN' button is pressed
@@ -52,7 +58,6 @@ public class GameUI : MonoBehaviour
             winScreen.SetActive(false);
 			manager.wonGame= false;
         }
-        
         
         manager.StartGame();
 	}
