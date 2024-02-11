@@ -4,7 +4,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Level1Gen : BrickGenerator
+public class Level1Gen : LevelGenerator
 {
     protected override void GenerationMethod()
     {

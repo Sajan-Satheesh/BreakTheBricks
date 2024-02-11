@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 	public int brickCountY;										//The amount of bricks that will be spawned vertically
 
 	public Color[] colors;          //The color array of the bricks. This can be modified to create different brick color patterns
-	[SerializeField] private BrickGenerator brickGenerator;
+	[SerializeField] private LevelGenerator brickGenerator;
     List<BrickData> brickPositionalDatas = new List<BrickData>();
 
     void Start ()

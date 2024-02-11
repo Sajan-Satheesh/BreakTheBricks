@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public abstract class BrickGenerator 
+public abstract class LevelGenerator 
 {
     protected bool colorReverse = false;
     protected bool hitReverse = false;
@@ -46,17 +44,5 @@ public abstract class BrickGenerator
     protected abstract void GenerationMethod();
 
 }
-public struct BrickData
-{
-    public Vector3 positon;
-    public int colorIndex;
-    public int hitCount;
-    public BrickData(Vector3 _position, int _colorIndex, int _hitCount)
-    {
-        positon = _position;
-        colorIndex = _colorIndex;
-        hitCount = _hitCount;
-    }
 
-}
 

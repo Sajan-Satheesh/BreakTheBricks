@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level4Gen : BrickGenerator
+public class Level4Gen : LevelGenerator
 {
     int repStartIndex = 1;
     int repIndex = 1;

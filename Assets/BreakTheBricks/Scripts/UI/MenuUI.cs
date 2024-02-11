@@ -14,6 +14,9 @@ public class MenuUI : MonoBehaviour
 	//Called when the quit button is pressed
 	public void QuitButton ()
 	{
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.ExitPlaymode();
+#endif
 		Application.Quit();			//Quits the game
 	}
 }

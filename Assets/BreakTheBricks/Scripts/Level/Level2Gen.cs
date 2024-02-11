@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level3Gen : BrickGenerator
+public class Level2Gen : LevelGenerator
 {
+
+    int repStartIndex = 1;
+    int repIndex = 1;
     protected override void GenerationMethod()
     {
-        int repIndex = 1;
-        for (int y = brickCountY / 2; y > -brickCountY / 2; y -= 2)
+        for (int y= brickCountY / 2; y > -brickCountY/2; y-=2)
         {
             if (colorId == colorsLength || colorId == -1) //If the 'colorId' is equal to the 'colors' array length. This means there is no more colors left
             {
@@ -20,13 +23,16 @@ public class Level3Gen : BrickGenerator
                 hitReverse = !hitReverse;
                 hitCount = hitReverse ? hitCount - 2 : hitCount + 2;
             }
-            for (int x = -brickCountX / 2; x < brickCountX / 2; x++)
+            resetRepIndex(ref repStartIndex, 1, 3 , false);
+            repIndex = repStartIndex;
+            for(int x = -brickCountX / 2; x < brickCountX/2; x++)
             {
-                resetRepIndex(ref repIndex, 2, 1);
-                if (repIndex == 1) Set1(x, y);
+                resetRepIndex(ref repIndex, 3, 1);
+                if (repIndex == 1) Set1(x,y);
                 if (repIndex == 2) Set2(x, y);
                 repIndex++;
             }
+            repStartIndex--;
             colorId = colorReverse ? colorId - 1 : colorId + 1;                      //Increases the 'colorId' by 1 as a new row is about to be made
             hitCount = hitReverse ? hitCount - 1 : hitCount + 1;
         }
@@ -42,9 +48,13 @@ public class Level3Gen : BrickGenerator
         brickDatas.Add(new BrickData(position + offset, colorId, hitCount));
     }
 
-    private void resetRepIndex(ref int index, int endIndex, int startIndex)
+    private void resetRepIndex(ref int index, int endIndex, int startIndex ,bool greater = true)
     {
+        if (!greater)
+        {
+            if (index < endIndex) index = startIndex;
+            return;
+        }
         if (index > endIndex) index = startIndex;
     }
 }
-
