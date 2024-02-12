@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
-using UnityEditor;
-using Unity.VisualScripting;
 
 public class Shooter : MonoBehaviour 
 {
